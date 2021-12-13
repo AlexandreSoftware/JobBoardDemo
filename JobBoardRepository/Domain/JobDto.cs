@@ -1,6 +1,6 @@
 ﻿namespace JobBoardRepository.Domain;
 
-public class Job
+public class JobDto
 {
     public int id;
     public string title;

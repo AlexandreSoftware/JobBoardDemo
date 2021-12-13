@@ -5,5 +5,5 @@ public class Applicant
 {
     public int id;
     public string name;
-    public List<Job> jobs;
+    public List<JobDto> jobs;
 }

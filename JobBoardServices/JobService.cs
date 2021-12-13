@@ -1,12 +1,13 @@
-﻿using JobBoardServices.View;
+﻿using JobBoardServices.Interface;
+using JobBoardServices.View;
 
 namespace JobBoardServices;
 
-public class JobService
+public class JobService:IJobService
 {
     public Job Get()
     {
-      return null
+        return null;
     }
     public Job Post()
     {

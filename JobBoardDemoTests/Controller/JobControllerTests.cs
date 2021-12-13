@@ -1,19 +1,34 @@
-﻿using JobBoardServices;
+﻿using JobBoardDemoApi.Controllers;
+using JobBoardServices;
+using JobBoardServices.Interface;
+using JobBoardServices.View;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Serilog.Core;
 using Xunit;
 
 namespace JobBoardDemoTests.Controller;
 
 public class JobControllerTests
 {
-    public JobService js;
+    public Mock<IJobService> js;
+    public Mock<Logger> log;
+    public JobController jc;
     public JobControllerTests()
     {
-        return null;
+        js = new Mock<IJobService>();
+        log = new Mock<Logger>();
+        jc = new JobController(js.Object,log.Object);
     }
     [Fact]
     public void OnGet_NullValue_ShouldReturnNull()
     {
-        
+        //Arrange
+        js.Setup(x => x.Get()).Returns((Job)null);
+        //Act   
+        var result = jc.Get();
+        //Assert
+        Assert.Equal(result.Value, null);
     }
     [Fact]
     public void OnGet_InvalidValue_ShouldReturnNull()
