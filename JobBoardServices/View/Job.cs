@@ -1,4 +1,4 @@
-﻿namespace JobBoardRepository.Domain;
+﻿namespace JobBoardServices.View;
 
 public class Job
 {
