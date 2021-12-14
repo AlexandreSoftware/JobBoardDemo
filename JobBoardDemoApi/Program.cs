@@ -1,9 +1,11 @@
 using JobBoardServices;
 using JobBoardServices.Interface;
 using JobBoardServices.View;
-
+using Serilog;
 var builder = WebApplication.CreateBuilder(args);
-
+//serilog
+builder.Host.UseSerilog((ctx, lc) =>
+    lc.WriteTo.Console());
 // Add services to the container.
 
 builder.Services.AddControllers();

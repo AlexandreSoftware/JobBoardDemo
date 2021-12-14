@@ -1,28 +1,33 @@
-﻿using JobBoardServices.Interface;
+﻿using System.Data.SqlTypes;
+using JobBoardServices.Interface;
 using JobBoardServices.View;
 
 namespace JobBoardServices;
 
 public class JobService:IJobService
 {
-    public Job Get()
+    public Job[] Get()
     {
         return null;
     }
-    public Job Post()
+    public bool Post(Job j)
+    {
+        return false;
+    }
+
+    public Job GetId(int id)
     {
         return null;
     }
-    public Job Delete()
+    public bool Delete(int id)
     {
-        return null;
+        return true;
     }
-    public Job Put()
+    public bool Put(Job j)
     {
-        return null;
+        return false;
     }
-    public Job Options()
+    public void Options()
     {
-        return null;
     }
 }
