@@ -27,16 +27,16 @@ public class JobController : Controller, IJobController
         Log.Information("[JobBoardDemoApi] [JobController] [Get] Starting Get Request");
         var result = js.Get();
         Log.Information("[JobBoardDemoApi] [JobController] [Get] Finished Get Request, Validating");
-        if (result != null || result.Length != 0)
+        if (result != null )
         {
-            Log.Information("[JobBoardDemoApi] [JobController] [Get] Validated Get Request, returning");
-            return Ok(result);
+            if (result.Length != 0)
+            {
+                Log.Information("[JobBoardDemoApi] [JobController] [Get] Validated Get Request, returning");
+                return Ok(result);
+            }
         }
-        else
-        {
-            Log.Information("[JobBoardDemoApi] [JobController] [Get] [ERROR] Error on request, returning error");
-            return NotFound(null);
-        }
+        Log.Information("[JobBoardDemoApi] [JobController] [Get] [ERROR] Error on request, returning error");
+        return NotFound(null);
     }
     
     [HttpGet("{id}")]
@@ -67,7 +67,7 @@ public class JobController : Controller, IJobController
         if (result)
             {
             Log.Information("[JobBoardDemoApi] [JobController] [Post] Validated Post request, returning");
-            return Ok(result);
+            return true;
             }
         else
         {
@@ -84,13 +84,14 @@ public class JobController : Controller, IJobController
         if (result)
         {
             Log.Information("[JobBoardDemoApi] [JobController] [Delete] Validated Delete request, returning");
-            return Ok((object)true);
+            //for some reason whenever i use OK(true) it breaks the code, when the code's like this *it just works*
+            return true;
             
         }
         else
         {
             Log.Information("[JobBoardDemoApi] [JobController] [Delete] [ERROR] Error on request, returning error");
-            return NotFound((object)false);
+            return NotFound(false);
         }
     }
     [HttpPut]
@@ -102,7 +103,7 @@ public class JobController : Controller, IJobController
         if (result)
         {
             Log.Information("[JobBoardDemoApi] [JobController] [Put] Validated Put request, returning");
-            return Ok(result);
+            return result;
         }
         else
         {

@@ -1,10 +1,8 @@
-﻿using FluentAssertions;
-using JobBoardDemoApi.Controllers;
-using JobBoardServices;
+﻿using JobBoardDemoApi.Controllers;
+using JobBoardDemoApi.Controllers.Interface;
 using JobBoardServices.Interface;
 using JobBoardServices.View;
 using Moq;
-using Serilog;
 using Xunit;
 
 namespace JobBoardDemoTests.Controller;
@@ -12,7 +10,7 @@ namespace JobBoardDemoTests.Controller;
 public class JobControllerTests
 {
     public Mock<IJobService> js;
-    public JobController jc;
+    public IJobController jc;
     public JobControllerTests()
     {
         js = new Mock<IJobService>();
@@ -26,7 +24,7 @@ public class JobControllerTests
         //Act   
         var result = jc.Get();
         //Assert
-        Assert.Equal(null,result.Value);
+        Assert.Null(result.Value);
     }
     [Fact]
     public void OnGet_emptyArray_ShouldReturnNull()
@@ -36,7 +34,7 @@ public class JobControllerTests
         //Act   
         var result = jc.Get();
         //Assert
-        Assert.Equal(null,result.Value);
+        Assert.Null(result.Value);
     }
     [Fact]
     public void OnPost_NullValue_ShouldReturnNull()
@@ -70,10 +68,11 @@ public class JobControllerTests
     [InlineData(242)]
     public void OnPost_ValidValue_ShouldReturnTrue(int id)
     {
+        var obj = new Job {id = id};
         //Arrange
-        js.Setup(x => x.Post(new Job{id = id})).Returns(true);
+        js.Setup(x => x.Post(obj)).Returns(true);
         //Act   
-        var result = jc.Post(new Job{id = id});
+        var result = jc.Post(obj);
         //Assert
         Assert.True(result.Value);   
     }
@@ -108,10 +107,11 @@ public class JobControllerTests
     [InlineData(242)]
     public void OnPut_ValidValue_ShouldReturnTrue(int id)
     {
+        var obj = new Job {id = id};
         //Arrange
-        js.Setup(x => x.Put(new Job{id = id})).Returns(true);
+        js.Setup(x => x.Put(obj)).Returns(true);
         //Act   
-        var result = jc.Put(new Job{id = id});
+        var result = jc.Put(obj);
         //Assert
         Assert.True(result.Value);   
     }

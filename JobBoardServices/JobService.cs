@@ -12,7 +12,7 @@ public class JobService:IJobService
     }
     public bool Post(Job j)
     {
-        return false;
+        return true;
     }
 
     public Job GetId(int id)
@@ -25,7 +25,7 @@ public class JobService:IJobService
     }
     public bool Put(Job j)
     {
-        return false;
+        return true;
     }
     public void Options()
     {
