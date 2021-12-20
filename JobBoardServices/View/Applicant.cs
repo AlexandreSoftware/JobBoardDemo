@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using JobBoardServices.View;
 
 namespace JobBoardRepository.Domain;
 public class Applicant
 {
     public int id;
     public string name;
-    public List<JobDto> jobs;
+    public List<Job> jobs;
 }

@@ -1,3 +1,5 @@
+using JobBoardRepository;
+using JobBoardRepository.Interface;
 using JobBoardServices;
 using JobBoardServices.Interface;
 using JobBoardServices.View;
@@ -13,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IJobService, JobService>();
+builder.Services.AddTransient<IJobRepository, JobRepository>(); 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policyBuilder =>

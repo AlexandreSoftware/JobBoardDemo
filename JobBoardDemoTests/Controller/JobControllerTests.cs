@@ -9,20 +9,20 @@ namespace JobBoardDemoTests.Controller;
 
 public class JobControllerTests
 {
-    public Mock<IJobService> js;
-    public IJobController jc;
+    public Mock<IJobService> _js;
+    public IJobController _jc;
     public JobControllerTests()
     {
-        js = new Mock<IJobService>();
-        jc = new JobController(js.Object);
+        _js = new Mock<IJobService>();
+        _jc = new JobController(_js.Object);
     }
     [Fact]
     public void OnGet_NullValue_ShouldReturnNull()
     {
         //Arrange
-        js.Setup(x => x.Get()).Returns((Job[])null);
+        _js.Setup(x => x.Get()).Returns((Job[])null);
         //Act   
-        var result = jc.Get();
+        var result = _jc.Get();
         //Assert
         Assert.Null(result.Value);
     }
@@ -30,9 +30,9 @@ public class JobControllerTests
     public void OnGet_emptyArray_ShouldReturnNull()
     {
         //Arrange
-        js.Setup(x => x.Get()).Returns(new Job[]{});
+        _js.Setup(x => x.Get()).Returns(new Job[]{});
         //Act   
-        var result = jc.Get();
+        var result = _jc.Get();
         //Assert
         Assert.Null(result.Value);
     }
@@ -40,9 +40,9 @@ public class JobControllerTests
     public void OnPost_NullValue_ShouldReturnNull()
     {
         //Arrange
-        js.Setup(x => x.Post(null)).Returns(false);
+        _js.Setup(x => x.Post(null)).Returns(false);
         //Act   
-        var result = jc.Post(null);
+        var result = _jc.Post(null);
         //Assert
         Assert.False(result.Value);   
     }
@@ -50,9 +50,9 @@ public class JobControllerTests
     public void OnPost_InvalidValue_ShouldReturnNull()
     {
         //Arrange
-        js.Setup(x => x.Post(null)).Returns(false);
+        _js.Setup(x => x.Post(null)).Returns(false);
         //Act   
-        var result = jc.Post(null);
+        var result = _jc.Post(null);
         //Assert
         Assert.False(result.Value);
     }
@@ -70,9 +70,9 @@ public class JobControllerTests
     {
         var obj = new Job {id = id};
         //Arrange
-        js.Setup(x => x.Post(obj)).Returns(true);
+        _js.Setup(x => x.Post(obj)).Returns(true);
         //Act   
-        var result = jc.Post(obj);
+        var result = _jc.Post(obj);
         //Assert
         Assert.True(result.Value);   
     }
@@ -90,11 +90,11 @@ public class JobControllerTests
     public void OnDelete_ValidValue_ShouldReturnTrue(int id)
     {
         //Arrange
-        js.Setup(x => x.Delete(id)).Returns(true);
+        _js.Setup(x => x.Delete(id)).Returns(true);
         //Act   
-        var result = jc.Delete(id);
+        bool result = _jc.Delete(id).Value;
         //Assert
-        Assert.True(result.Value);   
+        Assert.True(result);   
     }
     [Theory]
     [InlineData(1)]
@@ -109,9 +109,9 @@ public class JobControllerTests
     {
         var obj = new Job {id = id};
         //Arrange
-        js.Setup(x => x.Put(obj)).Returns(true);
+        _js.Setup(x => x.Put(obj)).Returns(true);
         //Act   
-        var result = jc.Put(obj);
+        var result = _jc.Put(obj);
         //Assert
         Assert.True(result.Value);   
     }

@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlTypes;
+using JobBoardRepository.Interface;
 using JobBoardServices.Interface;
 using JobBoardServices.View;
 
@@ -6,6 +7,12 @@ namespace JobBoardServices;
 
 public class JobService:IJobService
 {
+    private IJobRepository _jr;
+
+    public JobService(IJobRepository jr)
+    {
+        this._jr = jr;
+    }
     public Job[] Get()
     {
         return null;

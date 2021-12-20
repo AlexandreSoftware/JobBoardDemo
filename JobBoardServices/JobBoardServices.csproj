@@ -10,4 +10,8 @@
       <ProjectReference Include="..\JobBoardRepository\JobBoardRepository.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="10.1.1" />
+    </ItemGroup>
+
 </Project>

@@ -15,17 +15,17 @@ namespace JobBoardDemoApi.Controllers;
 [Route("Job")]
 public class JobController : Controller, IJobController
 {
-    public IJobService js;
+    public IJobService _js;
     public JobController(IJobService js)
     {
-        this.js = js;
+        this._js = js;
     }
 
     [HttpGet]
     public ActionResult<Job[]> Get()
     {
         Log.Information("[JobBoardDemoApi] [JobController] [Get] Starting Get Request");
-        var result = js.Get();
+        var result = _js.Get();
         Log.Information("[JobBoardDemoApi] [JobController] [Get] Finished Get Request, Validating");
         if (result != null )
         {
@@ -44,7 +44,7 @@ public class JobController : Controller, IJobController
     public ActionResult<Job> GetId(int id)
     {
         Log.Information("[JobBoardDemoApi] [JobController] [GetId] Starting GetId request");
-        var result = js.GetId(id);
+        var result = _js.GetId(id);
         Log.Information("[JobBoardDemoApi] [JobController] [GetId] Finished GetId request, Validating");
         if (result != null)
         {
@@ -62,7 +62,7 @@ public class JobController : Controller, IJobController
     public ActionResult<bool> Post(Job j)
     {
         Log.Information("[JobBoardDemoApi] [JobController] [Post] Starting Post request");
-        var result = js.Post(j);
+        var result = _js.Post(j);
         Log.Information("[JobBoardDemoApi] [JobController] [Post] Finished Post request, Validating");
         if (result)
             {
@@ -79,7 +79,7 @@ public class JobController : Controller, IJobController
     public ActionResult<bool> Delete(int id)
     {
         Log.Information("[JobBoardDemoApi] [JobController] [Delete] Starting Delete request");
-        var result = js.Delete(id);
+        bool result = _js.Delete(id);
         Log.Information("[JobBoardDemoApi] [JobController] [Delete] Finished Delete request, Validating");
         if (result)
         {
@@ -98,12 +98,12 @@ public class JobController : Controller, IJobController
     public ActionResult<bool> Put(Job j)
     {
         Log.Information("[JobBoardDemoApi] [JobController] [Put] Starting Put request");
-        var result = js.Put(j);
+        bool result = _js.Put(j);
         Log.Information("[JobBoardDemoApi] [JobController] [Put] Finished Put request, Validating");
         if (result)
         {
             Log.Information("[JobBoardDemoApi] [JobController] [Put] Validated Put request, returning");
-            return result;
+            return true;
         }
         else
         {
