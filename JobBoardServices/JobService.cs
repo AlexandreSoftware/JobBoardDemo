@@ -21,7 +21,6 @@ public class JobService:IJobService
     {
         return true;
     }
-
     public Job GetId(int id)
     {
         return null;
