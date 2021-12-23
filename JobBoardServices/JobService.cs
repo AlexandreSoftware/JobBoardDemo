@@ -28,7 +28,6 @@ public class JobService:IJobService
             JobDTO jd = _mapper.Map<Job,JobDTO>(j);
             return _jr.Post(jd);
     }
-
     public Job GetId(int id)
     {
         return null;
