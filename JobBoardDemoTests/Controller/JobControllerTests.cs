@@ -1,4 +1,5 @@
-﻿using JobBoardDemoApi.Controllers;
+﻿using AutoMapper;
+using JobBoardDemoApi.Controllers;
 using JobBoardDemoApi.Controllers.Interface;
 using JobBoardServices.Interface;
 using JobBoardServices.View;
@@ -30,7 +31,7 @@ public class JobControllerTests
     public void OnGet_emptyArray_ShouldReturnNull()
     {
         //Arrange
-        _js.Setup(x => x.Get()).Returns(new Job[]{});
+        _js.Setup(x => x.Get()).Returns((Job[])null);
         //Act   
         var result = _jc.Get();
         //Assert

@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IJobService, JobService>();
+builder.Services.AddAutoMapper(typeof(JobProfile));
 builder.Services.AddTransient<IJobRepository, JobRepository>(); 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Bogus;
 using JobBoardRepository.Domain;
 using JobBoardRepository.Interface;
@@ -15,12 +16,17 @@ public class JobServiceTests
 {
     private IJobService _js;
     public Mock<IJobRepository> _jr;
-    public Faker<JobDTO> faker; 
-
+    public Faker<JobDTO> faker;
+    public Mapper m ;
     public JobServiceTests()
     {
+        
+        var myProfile = new JobProfile();
+        var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+        m = new Mapper(configuration);
         this._jr = new Mock<IJobRepository>();
-        this._js = new JobService(_jr.Object);
+        
+        this._js = new JobService(_jr.Object, m);
         this.faker = new Faker<JobDTO>()
             .RuleFor(property: x => x.id, c => c.IndexFaker)
             .RuleFor(property: x => x.title, setter: c => c.Company + " " + c.Commerce)
