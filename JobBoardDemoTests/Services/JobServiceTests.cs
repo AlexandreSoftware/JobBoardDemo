@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using Bogus;
+using FluentAssertions;
 using JobBoardRepository.Domain;
 using JobBoardRepository.Interface;
 using JobBoardServices;
@@ -46,17 +47,6 @@ public class JobServiceTests
     }
 
     [Fact]
-    public void OnGet_NullValue_ShouldReturnNull()
-    {
-        //Arrange
-        _jr.Setup(x => x.Get()).Returns((JobDTO[]) null);
-        //Act   
-        var result = _js.Get();
-        //Assert
-        Assert.Null(result);
-    }
-
-    [Fact]
     public void OnGet_ValidValue_ShouldReturnMappedObject()
     {
         //Arrange
@@ -77,7 +67,7 @@ public class JobServiceTests
         //Act   
         var result = _js.Get();
         //Assert
-        Assert.Equal(mockresult,result);
+        result.Should().BeEquivalentTo(mockresult);
     }
     [Fact]
     public void OnPost_FalseValue_ShouldReturnFalse()
@@ -96,7 +86,7 @@ public class JobServiceTests
         ;
         //Arrange
         var data = faker.Generate(1)[0];
-        _jr.Setup(x => x.Post(data)).Returns(true);
+        _jr.Setup(x => x.Post(It.IsAny<JobDTO>())).Returns(true);
         var mockresult = new Job()
         {
             id = data.id,
@@ -141,7 +131,7 @@ public class JobServiceTests
         //Act   
         var result = _js.GetId(1);
         //Assert
-        Assert.Equal(mockresult,result);
+        result.Should().BeEquivalentTo(mockresult);
     }
     [Fact]
     public void OnDelete_FalseValue_ShouldReturnFalse()
@@ -182,7 +172,7 @@ public class JobServiceTests
         ;
         //Arrange
         var data = faker.Generate(1)[0];
-        _jr.Setup(x => x.Put(data)).Returns(true);
+        _jr.Setup(x => x.Put(It.IsAny<JobDTO>())).Returns(true);
         var mockresult = new Job()
         {
             id = data.id,

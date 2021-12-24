@@ -20,7 +20,9 @@ public class JobService:IJobService
     }
     public Job[] Get()
     {
-        return null;
+        var jobDto = _jr.Get();
+        Job[] job = jobDto.Select(x=>_mapper.Map<JobDTO,Job>(x)).Take(50).ToArray();
+        return job;
     }
 
     public bool Post(Job j)
@@ -30,17 +32,17 @@ public class JobService:IJobService
     }
     public Job GetId(int id)
     {
-        return null;
+        var jobDto = _jr.GetId(id);
+        Job job = _mapper.Map<JobDTO,Job>(jobDto);
+        return job;    
     }
     public bool Delete(int id)
     {
-        return true;
+        return _jr.Delete(id);
     }
     public bool Put(Job j)
     {
-        return true;
-    }
-    public void Options()
-    {
+        JobDTO jd = _mapper.Map<Job,JobDTO>(j);
+        return _jr.Put(jd);
     }
 }

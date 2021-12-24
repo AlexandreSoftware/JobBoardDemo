@@ -9,6 +9,6 @@ public class JobProfile :Profile
     
     public JobProfile()
     {
-        CreateMap<Job, JobDTO>();
+        CreateMap<Job, JobDTO>().ReverseMap();
     }
 }
