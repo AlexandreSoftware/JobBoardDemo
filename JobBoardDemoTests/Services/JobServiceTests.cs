@@ -29,18 +29,18 @@ public class JobServiceTests
         
         this._js = new JobService(_jr.Object, m);
         this.faker = new Faker<JobDTO>()
-            .RuleFor(property: x => x.id, c => c.IndexFaker)
-            .RuleFor(property: x => x.title, setter: c => c.Company + " " + c.Commerce)
-            .RuleFor(property: x => x.description, setter: c => c.Lorem.Word())
-            .RuleFor(property: x => x.subTitle, setter: c => c.Lorem.Word())
-            .RuleFor(property: x => x.maxPay, setter: c => c.Finance.Random.Int())
-            .RuleFor(property: x => x.minPay, setter: (c, usr) =>
+            .RuleFor(property: x => x.ProductId, c => c.IndexFaker)
+            .RuleFor(property: x => x.Title, setter: c => c.Company + " " + c.Commerce)
+            .RuleFor(property: x => x.Description, setter: c => c.Lorem.Word())
+            .RuleFor(property: x => x.SubTitle, setter: c => c.Lorem.Word())
+            .RuleFor(property: x => x.MaxPay, setter: c => c.Finance.Random.Int())
+            .RuleFor(property: x => x.MinPay, setter: (c, usr) =>
             {
                 int val;
                 do
                 {
                     val = c.Finance.Random.Int();
-                } while (val > usr.maxPay);
+                } while (val > usr.MaxPay);
 
                 return val;
             });
@@ -56,12 +56,12 @@ public class JobServiceTests
         {
             return new Job()
             {
-                id = x.id,
-                description = x.description,
-                title = x.title,
-                maxPay = x.maxPay,
-                minPay = x.minPay,
-                subTitle = x.subTitle
+                id = x.ProductId,
+                description = x.Description,
+                title = x.Title,
+                maxPay = x.MaxPay,
+                minPay = x.MinPay,
+                subTitle = x.SubTitle
             };
         }).ToArray();
         //Act   
@@ -89,28 +89,17 @@ public class JobServiceTests
         _jr.Setup(x => x.Post(It.IsAny<JobDTO>())).Returns(true);
         var mockresult = new Job()
         {
-            id = data.id,
-            description = data.description,
-            title = data.title,
-            maxPay = data.maxPay,
-            minPay = data.minPay,
-            subTitle = data.subTitle
+            id = data.ProductId,
+            description = data.Description,
+            title = data.Title,
+            maxPay = data.MaxPay,
+            minPay = data.MinPay,
+            subTitle = data.SubTitle
         };
         //Act   
         var result = _js.Post(mockresult);
         //Assert
         Assert.True(result);
-    }
-    
-    [Fact]
-    public void OnGetId_InvalidId_ShouldReturnNull()
-    {
-        //Arrange
-        _jr.Setup(x => x.GetId(1)).Returns((JobDTO)null);
-        //Act   
-        var result = _js.GetId(1);
-        //Assert
-        Assert.Null(result);
     }
 
     [Fact]
@@ -121,12 +110,12 @@ public class JobServiceTests
         _jr.Setup(x => x.GetId(1)).Returns(data);
         var mockresult = new Job()
         {
-            id = data.id,
-            description = data.description,
-            title = data.title,
-            maxPay = data.maxPay,
-            minPay = data.minPay,
-            subTitle = data.subTitle
+            id = data.ProductId,
+            description = data.Description,
+            title = data.Title,
+            maxPay = data.MaxPay,
+            minPay = data.MinPay,
+            subTitle = data.SubTitle
         };
         //Act   
         var result = _js.GetId(1);
@@ -159,9 +148,9 @@ public class JobServiceTests
     public void OnPut_FalseValue_ShouldReturnFalse()
     {
         //Arrange
-        _jr.Setup(x => x.Put(null)).Returns(false);
+        _jr.Setup(x => x.Put(It.IsAny<JobDTO>())).Returns(false);
         //Act   
-        var result = _js.Put(null);
+        var result = _js.Put(new Job());
         //Assert
         Assert.False(result);
     }
@@ -175,12 +164,12 @@ public class JobServiceTests
         _jr.Setup(x => x.Put(It.IsAny<JobDTO>())).Returns(true);
         var mockresult = new Job()
         {
-            id = data.id,
-            description = data.description,
-            title = data.title,
-            maxPay = data.maxPay,
-            minPay = data.minPay,
-            subTitle = data.subTitle
+            id = data.ProductId,
+            description = data.Description,
+            title = data.Title,
+            maxPay = data.MaxPay,
+            minPay = data.MinPay,
+            subTitle = data.SubTitle
         };
         //Act   
         var result = _js.Put(mockresult);
