@@ -1,3 +1,4 @@
+using System.Data.Common;
 using JobBoardRepository;
 using JobBoardRepository.Interface;
 using JobBoardServices;
@@ -7,7 +8,13 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 //serilog
 builder.Host.UseSerilog((ctx, lc) =>
-    lc.WriteTo.Console());
+    
+    lc
+        .WriteTo.Console()
+        .WriteTo.Seq("http://localhost:5341")
+        .WriteTo.Elasticsearch("http://localhost:9200")
+        .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+);
 // Add services to the container.
 
 builder.Services.AddControllers();

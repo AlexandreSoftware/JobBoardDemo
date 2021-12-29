@@ -4,6 +4,7 @@ using JobBoardRepository.Domain;
 using JobBoardRepository.Interface;
 using JobBoardServices.Interface;
 using JobBoardServices.View;
+using Serilog;
 
 namespace JobBoardServices;
 
@@ -20,7 +21,9 @@ public class JobService:IJobService
     }
     public Job[] Get()
     {
+        Log.Information("[JobBoardDemoApi] [JobController] [Options] starting get request");
         var jobDto = _jr.Get();
+        
         Job[] job = jobDto.Select(x=>_mapper.Map<JobDTO,Job>(x)).Take(50).ToArray();
         return job;
     }

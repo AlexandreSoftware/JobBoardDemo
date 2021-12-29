@@ -7,15 +7,19 @@ namespace JobBoardRepository;
 
 public class JobRepository:IJobRepository
 {
-    public DbConnection _db;
-    public JobRepository(DbConnection db)
-    {
-        this._db = db;
-    }
+    public readonly DapperWrapper _dw;
+
+    
     public JobDTO[] Get()
     {
-        return null;
-    }
+        return new JobDTO[]
+        {
+            new JobDTO()
+            {
+                ProductId = 1
+            }
+        };
+}
     public bool Post(JobDTO j)
     {
         return true;

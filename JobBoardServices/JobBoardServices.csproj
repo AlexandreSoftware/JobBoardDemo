@@ -13,6 +13,7 @@
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="10.1.1" />
       <PackageReference Include="ExpressiveAnnotations" Version="2.9.6" />
+      <PackageReference Include="Serilog.Sinks.Seq" Version="5.1.0" />
     </ItemGroup>
 
 </Project>
