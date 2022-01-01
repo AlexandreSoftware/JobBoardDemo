@@ -9,17 +9,27 @@ public class JobRepository:IJobRepository
 {
     public readonly DapperWrapper _dw;
 
-    
+    public string _cs;
+    // public JobRepository(string? cs)
+    // {
+    //     this._cs = cs;
+    // }
     public JobDTO[] Get()
     {
-        return new JobDTO[]
-        {
-            new JobDTO()
-            {
-                ProductId = 1
-            }
-        };
-}
+        // return new JobDTO[1]
+        // {
+        //     // new JobDTO()
+        //     // {
+        //     //     ProductId = 1,
+        //     //     Description = _cs,
+        //     //     Title = "aisjai",
+        //     //     MaxPay = 100,
+        //     //     MinPay = 10,
+        //     //     SubTitle = "FOKFSAKO"
+        //     // }
+        // };
+        return null;
+    }
     public bool Post(JobDTO j)
     {
         return true;
@@ -27,7 +37,15 @@ public class JobRepository:IJobRepository
 
     public JobDTO GetId(int id)
     {
-        return null;
+        return new JobDTO()
+        {
+            ProductId = 1,
+            Description = _cs,
+            Title = "aisjai",
+            MaxPay = 100,
+            MinPay = 10,
+            SubTitle = "FOKFSAKO"
+        };
     }
     public bool Delete(int id)
     {

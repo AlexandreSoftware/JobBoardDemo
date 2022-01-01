@@ -24,6 +24,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IJobService, JobService>();
 builder.Services.AddAutoMapper(typeof(JobProfile));
 builder.Services.AddTransient<IJobRepository, JobRepository>(); 
+Seeder.Migrate(builder.Configuration.GetValue<string>("DefaultConnectionNodb"));
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policyBuilder =>
