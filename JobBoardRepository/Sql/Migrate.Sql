@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS Job(
 );
 CREATE TABLE IF NOT EXISTS Applicant(
   Id INT AUTO_INCREMENT primary key,
-  Name nvarchar (100)
+  Name nvarchar (100),
+  WageExpectation double
 );
 CREATE TABLE IF NOT EXISTS JobApplicant(
     Id INT AUTO_INCREMENT primary key,
@@ -19,5 +20,4 @@ CREATE TABLE IF NOT EXISTS JobApplicant(
     Job Int NOT NULL,
     FOREIGN KEY (Applicant) REFERENCES Applicant(Id),
     FOREIGN KEY (Job) REFERENCES Job(ProductId)
-    
 );

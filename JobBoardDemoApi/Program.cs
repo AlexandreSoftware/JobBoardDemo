@@ -3,6 +3,8 @@ using JobBoardRepository;
 using JobBoardRepository.Interface;
 using JobBoardServices;
 using JobBoardServices.Interface;
+using JobBoardServices.Profile;
+using JobBoardServices.Service;
 using JobBoardServices.View;
 using Serilog;
 var builder = WebApplication.CreateBuilder(args);
@@ -22,9 +24,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IJobService, JobService>();
-builder.Services.AddAutoMapper(typeof(JobProfile));
+builder.Services.AddTransient<IApplicantService, ApplicantService>();
+builder.Services.AddAutoMapper(typeof(JobProfile),typeof(ApplicantProfile));
 builder.Services.AddTransient<IDapperWrapper,DapperWrapper>(x=>new DapperWrapper(builder.Configuration.GetValue<string>("DefaultConnection")));
 builder.Services.AddTransient<IJobRepository, JobRepository>();
+builder.Services.AddTransient <IApplicantRepository,ApplicantRepository>();
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policyBuilder =>
@@ -35,9 +39,9 @@ builder.Services.AddCors(options =>
         }));
 var app = builder.Build();
 // Configure the HTTP request pipeline.
+Seeder.Migrate(builder.Configuration.GetValue<string>("DefaultConnectionNodb"));
 if (app.Environment.IsDevelopment())
 {
-    Seeder.Migrate(builder.Configuration.GetValue<string>("DefaultConnectionNodb"));
     app.UseSwagger();
     app.UseSwaggerUI();
 }

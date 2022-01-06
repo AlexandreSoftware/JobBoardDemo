@@ -7,6 +7,7 @@ using JobBoardRepository.Domain;
 using JobBoardRepository.Interface;
 using JobBoardServices;
 using JobBoardServices.Interface;
+using JobBoardServices.Profile;
 using JobBoardServices.View;
 using Moq;
 using Xunit;
@@ -22,7 +23,7 @@ public class JobServiceTests
     public JobServiceTests()
     {
         
-        var myProfile = new JobProfile();
+        JobProfile myProfile = new JobProfile();
         var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
         m = new Mapper(configuration);
         this._jr = new Mock<IJobRepository>();

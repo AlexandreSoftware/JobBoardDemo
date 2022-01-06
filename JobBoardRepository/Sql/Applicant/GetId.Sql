@@ -1,0 +1,1 @@
+SELECT * from Applicant where Id = @Id;

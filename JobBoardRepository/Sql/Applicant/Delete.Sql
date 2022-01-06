@@ -1,0 +1,1 @@
+DELETE FROM Applicant WHERE Id=@Id;

@@ -5,7 +5,10 @@ namespace JobBoardRepository.Domain;
 public class ApplicantDTO
 {
     [Key]
-    public int id;
+    public int Id { get; set; }
     [Required]
-    public string name;
+    [StringLength(100,ErrorMessage = "Name needs to be between 1 and 100 characters")]
+    public string Name { get; set; }
+    [Required]
+    public double WageExpectation { get; set; }
 }

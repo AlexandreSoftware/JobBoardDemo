@@ -2,9 +2,9 @@
 using JobBoardRepository.Domain;
 using JobBoardServices.View;
 
-namespace JobBoardServices;
+namespace JobBoardServices.Profile;
 
-public class JobProfile :Profile
+public class JobProfile :AutoMapper.Profile
 {
     
     public JobProfile()
