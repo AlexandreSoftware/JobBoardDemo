@@ -1,1 +1,1 @@
-﻿INSERT INTO Applicant (Id, Name,WageExpectation) VALUES (@Id,@Name,@WageExpectation);
+﻿INSERT INTO Applicant (Name,WageExpectation) VALUES (@Name,@WageExpectation);

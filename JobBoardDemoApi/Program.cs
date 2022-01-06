@@ -39,14 +39,15 @@ builder.Services.AddCors(options =>
         }));
 var app = builder.Build();
 // Configure the HTTP request pipeline.
-Seeder.Migrate(builder.Configuration.GetValue<string>("DefaultConnectionNodb"));
+
 if (app.Environment.IsProduction())
 {
     Seeder.PublishMigrate(builder.Configuration.GetValue<string>("DefaultConnectionNodb"));
 }
 if (app.Environment.IsDevelopment())
 {
-    Seeder.Seed(builder.Configuration.GetValue<string>("DefaultConnection"));
+    Seeder.MigrateAndSeed(builder.Configuration.GetValue<string>("DefaultConnectionNodb"),
+        builder.Configuration.GetValue<string>("DefaultConnection"));
     app.UseSwagger();
     app.UseSwaggerUI();
 }

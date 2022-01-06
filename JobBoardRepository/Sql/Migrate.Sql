@@ -1,4 +1,4 @@
-﻿DROP DATABASE JobBoardDemo;
+﻿DROP database JobBoardDemo;
 CREATE DATABASE IF NOT EXISTS JobBoardDemo;
 USE JobBoardDemo;
 CREATE TABLE IF NOT EXISTS Job(
