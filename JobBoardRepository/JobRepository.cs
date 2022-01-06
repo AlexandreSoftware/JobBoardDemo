@@ -31,7 +31,7 @@ public class JobRepository : IJobRepository
         Log.Information($"{templatelog} Starting Repository, Finding File");
         var sql = await SqlReader.ReadFile("Job/Post");
         Log.Information($"{templatelog} Got Sql String, Querying");
-        _dw.ExecuteParams<JobDTO>(@sql,j);
+        _dw.ExecuteParamsAsync<JobDTO>(@sql,j);
         Log.Information($"{templatelog} Query done, returning");
         return true;
     }
@@ -53,7 +53,7 @@ public class JobRepository : IJobRepository
         Log.Information($"{templatelog} Starting Repository, Finding File");
         var sql = await SqlReader.ReadFile("Job/Delete");
         Log.Information($"{templatelog} Got Sql String, Querying");
-        _dw.ExecuteParams(@sql,new{ProductId=id});
+        _dw.ExecuteParamsAsync(@sql,new{ProductId=id});
         Log.Information($"{templatelog} Query done, returning");
         return true;
     }
@@ -63,7 +63,7 @@ public class JobRepository : IJobRepository
         Log.Information($"{templatelog} Starting Repository, Finding File");
         var sql = await SqlReader.ReadFile("Job/Put");
         Log.Information($"{templatelog} Got Sql String, Querying");
-        _dw.ExecuteParams<JobDTO>(@sql,j);
+        _dw.ExecuteParamsAsync<JobDTO>(@sql,j);
         Log.Information($"{templatelog} Query done, returning");
         return true;
     }

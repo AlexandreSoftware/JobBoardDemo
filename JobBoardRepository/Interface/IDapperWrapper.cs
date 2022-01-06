@@ -9,7 +9,7 @@ public interface IDapperWrapper
     public IEnumerable<T> Query<T>(string sql);
 
     public void Execute(string sql);
-    public void ExecuteParams<T>(string sql, T obj);
+    public void ExecuteParamsAsync<T>(string sql, T obj);
 
     public Task<IEnumerable<T>> QueryAsync<T>(string sql);
     public Task<IEnumerable<T>> QueryAsyncParams<T>(string sql, object obj);

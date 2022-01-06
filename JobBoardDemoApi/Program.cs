@@ -40,15 +40,17 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 Seeder.Migrate(builder.Configuration.GetValue<string>("DefaultConnectionNodb"));
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-else if (app.Environment.IsProduction())
+if (app.Environment.IsProduction())
 {
     Seeder.PublishMigrate(builder.Configuration.GetValue<string>("DefaultConnectionNodb"));
 }
+if (app.Environment.IsDevelopment())
+{
+    Seeder.Seed(builder.Configuration.GetValue<string>("DefaultConnection"));
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

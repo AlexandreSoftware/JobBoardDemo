@@ -8,20 +8,20 @@ namespace JobBoardServices.Service;
 
 public class ApplicantService : IApplicantService
 {
-    private readonly IApplicantRepository _jr;
+    private readonly IApplicantRepository _ar;
     private readonly IMapper _mapper;
 
-    public ApplicantService(IApplicantRepository jr,IMapper mapper)
+    public ApplicantService(IApplicantRepository ar,IMapper mapper)
     {
         
-        this._jr = jr;
+        this._ar = ar;
         _mapper = mapper;
     }
     public async Task<Applicant[]> Get()
     {
         string templatelog = "[JobBoardDemoApi] [ApplicantService] [Get] ";
         Log.Information($"{templatelog} starting get request");
-        var jobDto = await _jr.Get();
+        var jobDto = await _ar.Get();
         Log.Information($"{templatelog} got ApplicationDTO[], converting to Application[]");
         Applicant[] job = jobDto.Select(x=>_mapper.Map<ApplicantDTO,Applicant>(x)).Take(50).ToArray();
         Log.Information($"{templatelog} sucessfully got Application[] returning");
@@ -31,7 +31,7 @@ public class ApplicantService : IApplicantService
     {
         string templatelog = "[JobBoardDemoApi] [ApplicantService] [GetId] ";
         Log.Information($"{templatelog} Starting GET request");
-        var jobDto = _jr.GetId(id);
+        var jobDto = _ar.GetId(id);
         Log.Information($"{templatelog} Got ApplicationDTO by id, converting to Application");
         Applicant job = _mapper.Map<ApplicantDTO,Applicant>(await jobDto);
         Log.Information($"{templatelog} Sucessfully got Application returning");
@@ -42,7 +42,7 @@ public class ApplicantService : IApplicantService
     {
         string templatelog = "[JobBoardDemoApi] [ApplicantService] [Delete] ";
         Log.Information($"{templatelog} Starting DELETE request");
-        var res = await _jr.Delete(id);
+        var res = await _ar.Delete(id);
         Log.Information($"{templatelog} Called Delete");
         if (res)
         {
@@ -59,7 +59,7 @@ public class ApplicantService : IApplicantService
         Log.Information($"{templatelog} starting POST request mapping");
         ApplicantDTO jd = _mapper.Map<Applicant,ApplicantDTO>(j);
         Log.Information($"{templatelog} mapped object calling Repository");
-        var res =await _jr.Post(jd);
+        var res =await _ar.Post(jd);
         Log.Information($"{templatelog} Sucessfully updated, returning");
         if (res)
         {
@@ -76,7 +76,7 @@ public class ApplicantService : IApplicantService
         Log.Information($"{templatelog} starting PUT request mapping");
         ApplicantDTO jd = _mapper.Map<Applicant,ApplicantDTO>(j);
         Log.Information($"{templatelog} mapped object calling Repository");
-        var res = await _jr.Put(jd);
+        var res = await _ar.Put(jd);
         Log.Information($"{templatelog} Called PUT");
         if (res)
         {

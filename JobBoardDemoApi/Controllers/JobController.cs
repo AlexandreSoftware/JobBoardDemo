@@ -24,103 +24,155 @@ public class JobController : Controller, IJobController
     [HttpGet]
     public async Task<ActionResult<Job[]>> Get()
     {
-        Log.Information("[JobBoardDemoApi] [JobController] [Get] Starting Get Request");
-        var result =  await _js.Get();
-        Log.Information("[JobBoardDemoApi] [JobController] [Get] Finished Get Request, Validating");
-        if (result != null )
+        try
         {
-            if (result.Length != 0)
+            string templateLog = "[JobBoardDemoApi] [JobController] [GET]";
+            Log.Information($"{templateLog} Starting GET Request");
+            var result =  await _js.Get();
+            Log.Information($"{templateLog} Finished GET Request, Validating");
+            if (result != null)
             {
-                Log.Information("[JobBoardDemoApi] [JobController] [Get] Validated Get Request, returning");
-                return Ok(result);
+                if (result.Length != 0)
+                {
+                    Log.Information($"{templateLog} Validated GET request, returning");
+                    return Ok(result);
+                }
             }
+
+            Log.Error($"{templateLog} [ERROR] Empty Request, returning Null");
+            return NotFound(null);
         }
-        Log.Information("[JobBoardDemoApi] [JobController] [Get] [ERROR] Error on request, returning error");
-        return NotFound(null);
+        catch (Exception e)
+        {
+            Log.Error("[ERROR] exception catched "+e.Message);
+            return NotFound(null);
+        }
     }
     
     [HttpGet("{id}")]
 
     public async Task<ActionResult<Job>> GetId(int id)
     {
-        string templateLog = "[JobBoardDemoApi] [JobController] [GetId] "; 
-        Log.Information($"{templateLog} Starting GetId request");
-        Job? result = await _js.GetId(id);
-        Log.Information($"{templateLog} Finished GetId request, Validating");
-        if (result != null)
+        try
         {
-            Log.Information($"{templateLog} Validated GetId request, returning");
-            return Ok(result);
-        }
-        else
-        {
-        
+            string templateLog = "[JobBoardDemoApi] [JobController] [GETId] ";
+            Log.Information($"{templateLog} Starting GETId request");
+            Job? result = await _js.GetId(id);
+            Log.Information($"{templateLog} Finished GETId request, Validating");
+            if (result != null)
+            {
+                Log.Information($"{templateLog} Validated GETId request, returning");
+                return Ok(result);
+            }
+
             Log.Information($"{templateLog} Error on request, returning error");
             return NotFound(null);
         }
+        catch (Exception e)
+        {
+            Log.Error("[ERROR] exception catched "+e.Message);
+            return NotFound(null);
+        }
     }
+
     [HttpPost]
     public async Task<ActionResult<bool>> Post(Job j)
     {
-        Log.Information("[JobBoardDemoApi] [JobController] [Post] Starting Post request");
-        var result = await _js.Post(j);
-        Log.Information("[JobBoardDemoApi] [JobController] [Post] Finished Post request, Validating");
-        if (result)
-            {
-            Log.Information("[JobBoardDemoApi] [JobController] [Post] Validated Post request, returning");
-            return true;
-            }
-        else
+        try
         {
-            Log.Information("[JobBoardDemoApi] [JobController] [Post] [ERROR] Error on request, returning error");       
+            string templateLog = "[JobBoardDemoApi] [JobController] [POST] ";
+            Log.Information($"{templateLog} Starting Post request");
+            var result = await _js.Post(j);
+            Log.Information($"{templateLog} Finished Post request, Validating");
+            if (result)
+            {
+                Log.Information($"{templateLog} Validated Post request, returning");
+                return true;
+            }
+            else
+            {
+                Log.Information($"{templateLog} [ERROR] Error on request, returning error");
+                return NotFound(false);
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error("[ERROR] exception catched "+e.Message);
             return NotFound(false);
         }
     }
+
     [HttpDelete]
     public async Task<ActionResult<bool>> Delete(int id)
     {
-        Log.Information("[JobBoardDemoApi] [JobController] [Delete] Starting Delete request");
-        bool result = await _js.Delete(id);
-        Log.Information("[JobBoardDemoApi] [JobController] [Delete] Finished Delete request, Validating");
-        if (result)
+        try
         {
-            Log.Information("[JobBoardDemoApi] [JobController] [Delete] Validated Delete request, returning");
-            //for some reason whenever i use OK(true) it breaks the code, when the code's like this *it just works*
-            return true;
-            
+            string templateLog = "[JobBoardDemoApi] [JobController] [DELETE] ";
+            Log.Information($"{templateLog} Starting Delete request");
+            bool result = await _js.Delete(id);
+            Log.Information($"{templateLog} Finished Delete request, Validating");
+            if (result)
+            {
+                Log.Information($"{templateLog} Validated Delete request, returning");
+                //for some reason whenever i use OK(true) it breaks the code, when the code's like this *it just works*
+                return true;
+
+            }
+            else
+            {
+                Log.Information($"{templateLog} [ERROR] Error on request, returning error");
+                return NotFound(false);
+            }
         }
-        else
+        catch (Exception e)
         {
-            Log.Information("[JobBoardDemoApi] [JobController] [Delete] [ERROR] Error on request, returning error");
+            Log.Error("[ERROR] exception catched "+e.Message);
             return NotFound(false);
         }
     }
     [HttpPut]
     public async Task<ActionResult<bool>> Put(Job j)
     {
-        Log.Information("[JobBoardDemoApi] [JobController] [Put] Starting Put request");
-        bool result = await _js.Put(j);
-        Log.Information("[JobBoardDemoApi] [JobController] [Put] Finished Put request, Validating");
-        if (result)
+        try
         {
-            Log.Information("[JobBoardDemoApi] [JobController] [Put] Validated Put request, returning");
-            return true;
+            string templateLog = "[JobBoardDemoApi] [JobController] [PUT] ";
+            Log.Information($"{templateLog} Starting Put request");
+            bool result = await _js.Put(j);
+            Log.Information($"{templateLog} Finished Put request, Validating");
+            if (result)
+            {
+                Log.Information($"{templateLog} Validated Put request, returning");
+                return true;
+            }
+            else
+            {
+                Log.Information($"{templateLog} [ERROR] Error on request, returning error");
+                return NotFound(false);
+            }
         }
-        else
+        catch (Exception e)
         {
-            Log.Information("[JobBoardDemoApi] [JobController] [Put] [ERROR] Error on request, returning error");
-            return NotFound(false);
+            Log.Error("[ERROR] exception catched "+e.Message);
+            return NotFound(null);
         }
     }
     [HttpOptions]
     public async Task<ActionResult> Options()
     {
-        Log.Information("[JobBoardDemoApi] [JobController] [Options] adding headers");
-        HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-        HttpContext.Response.Headers.Add("Access-Control-Allow-Methods", "GET,DELETE,POST,PUT");
-        Log.Information("[JobBoardDemoApi] [JobController] [Options] Returning ");
-        return Ok();
-
+        try
+        {
+            string templateLog = "[JobBoardDemoApi] [JobController] [Options] ";
+            Log.Information($"{templateLog} adding headers");
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Methods", "GET,DELETE,POST,PUT");
+            Log.Information($"{templateLog} [Options] Returning ");
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Log.Error("[ERROR] exception catched "+e.Message);
+            return NotFound();
+        }
     }
     
 }

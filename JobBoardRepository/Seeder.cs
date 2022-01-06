@@ -1,4 +1,7 @@
-﻿using Serilog;
+﻿using Bogus;
+using JobBoardRepository.Domain;
+using Newtonsoft.Json.Linq;
+using Serilog;
 
 namespace JobBoardRepository;
 
@@ -29,8 +32,7 @@ public class Seeder
         db.Execute(sql);
     }
 
-    public static void Seed(string cs)
+    public async static void Seed(string cs)
     {
-        
     }
 }

@@ -29,7 +29,7 @@ public class ApplicantRepository : IApplicantRepository
         Log.Information($"{templatelog} Starting Repository, Finding File");
         var sql = await SqlReader.ReadFile("Applicant/Post");
         Log.Information($"{templatelog} Got Sql String, Querying");
-        _dw.ExecuteParams<ApplicantDTO>(@sql,ap);
+        _dw.ExecuteParamsAsync<ApplicantDTO>(@sql,ap);
         Log.Information($"{templatelog} Query done, returning");
         return true;
     }
@@ -51,7 +51,7 @@ public class ApplicantRepository : IApplicantRepository
         Log.Information($"{templatelog} Starting Repository, Finding File");
         var sql = await SqlReader.ReadFile("Applicant/Delete");
         Log.Information($"{templatelog} Got Sql String, Querying");
-        _dw.ExecuteParams(@sql,new{Id=id});
+        _dw.ExecuteParamsAsync(@sql,new{Id=id});
         Log.Information($"{templatelog} Query done, returning");
         return true;
     }
@@ -61,7 +61,7 @@ public class ApplicantRepository : IApplicantRepository
         Log.Information($"{templatelog} Starting Repository, Finding File");
         var sql = await SqlReader.ReadFile("Applicant/Put");
         Log.Information($"{templatelog} Got Sql String, Querying");
-        _dw.ExecuteParams<ApplicantDTO>(@sql,ap);
+        _dw.ExecuteParamsAsync<ApplicantDTO>(@sql,ap);
         Log.Information($"{templatelog} Query done, returning");
         return true;
     }
