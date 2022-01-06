@@ -2,60 +2,69 @@
 using System.Threading.Tasks.Dataflow;
 using JobBoardRepository.Domain;
 using JobBoardRepository.Interface;
+using Serilog;
 
 namespace JobBoardRepository;
 
-public class JobRepository:IJobRepository
+public class JobRepository : IJobRepository
 {
-    public readonly DapperWrapper _dw;
+    public IDapperWrapper _dw;
 
-    public string _cs;
-    // public JobRepository(string? cs)
-    // {
-    //     this._cs = cs;
-    // }
-    public JobDTO[] Get()
-    {
-        // return new JobDTO[1]
-        // {
-        //     // new JobDTO()
-        //     // {
-        //     //     ProductId = 1,
-        //     //     Description = _cs,
-        //     //     Title = "aisjai",
-        //     //     MaxPay = 100,
-        //     //     MinPay = 10,
-        //     //     SubTitle = "FOKFSAKO"
-        //     // }
-        // };
-        return null;
-    }
-    public bool Post(JobDTO j)
-    {
-        return true;
+    public JobRepository(IDapperWrapper dw){
+
+        this._dw = dw;
     }
 
-    public JobDTO GetId(int id)
+    public async Task<JobDTO[]> Get()
     {
-        return new JobDTO()
-        {
-            ProductId = 1,
-            Description = _cs,
-            Title = "aisjai",
-            MaxPay = 100,
-            MinPay = 10,
-            SubTitle = "FOKFSAKO"
-        };
+        string templatelog = "[JobBoardDemoRepository] [JobRepository] [Get]";
+        Log.Information($"{templatelog} Starting Repository, Finding File");
+        var sql = await SqlReader.ReadFile("Job/Get");
+        Log.Information($"{templatelog} Got Sql String, Querying");
+        var x = _dw.QueryAsync<JobDTO>(sql).Result;
+        Log.Information($"{templatelog} Query done, returning");
+        return x.ToArray();
     }
-    public bool Delete(int id)
+    public async Task<bool> Post(JobDTO j)
     {
+        string templatelog = "[JobBoardDemoRepository] [JobRepository] [Post]";
+        Log.Information($"{templatelog} Starting Repository, Finding File");
+        var sql = await SqlReader.ReadFile("Job/Post");
+        Log.Information($"{templatelog} Got Sql String, Querying");
+        _dw.ExecuteParams<JobDTO>(@sql,j);
+        Log.Information($"{templatelog} Query done, returning");
         return true;
     }
-    public bool Put(JobDTO j)
+
+    public async Task<JobDTO> GetId(int id)
     {
+        string templatelog = "[JobBoardDemoRepository] [JobRepository] [Post]";
+        Log.Information($"{templatelog} Starting Repository, Finding File");
+        var sql = await SqlReader.ReadFile("Job/GetId");
+        Log.Information($"{templatelog} Got Sql String, Querying");
+        var x = await _dw.QueryAsyncParams<JobDTO>(@sql,new{ProductId=id});
+        Log.Information($"{templatelog} Query done, returning");
+        return x.ToList()[0];
+
+    }
+    public async  Task<bool> Delete(int id)
+    {
+        string templatelog = "[JobBoardDemoRepository] [JobRepository] [Post]";
+        Log.Information($"{templatelog} Starting Repository, Finding File");
+        var sql = await SqlReader.ReadFile("Job/Delete");
+        Log.Information($"{templatelog} Got Sql String, Querying");
+        _dw.ExecuteParams(@sql,new{ProductId=id});
+        Log.Information($"{templatelog} Query done, returning");
         return true;
     }
-    public void Options()
+    public  async Task<bool> Put(JobDTO j)
     {
+        string templatelog = "[JobBoardDemoRepository] [JobRepository] [Post]";
+        Log.Information($"{templatelog} Starting Repository, Finding File");
+        var sql = await SqlReader.ReadFile("Job/Put");
+        Log.Information($"{templatelog} Got Sql String, Querying");
+        _dw.ExecuteParams<JobDTO>(@sql,j);
+        Log.Information($"{templatelog} Query done, returning");
+        return true;
     }
 }

@@ -22,10 +22,10 @@ public class JobController : Controller, IJobController
     }
 
     [HttpGet]
-    public ActionResult<Job[]> Get()
+    public async Task<ActionResult<Job[]>> Get()
     {
         Log.Information("[JobBoardDemoApi] [JobController] [Get] Starting Get Request");
-        var result = _js.Get();
+        var result =  await _js.Get();
         Log.Information("[JobBoardDemoApi] [JobController] [Get] Finished Get Request, Validating");
         if (result != null )
         {
@@ -41,28 +41,29 @@ public class JobController : Controller, IJobController
     
     [HttpGet("{id}")]
 
-    public ActionResult<Job> GetId(int id)
+    public async Task<ActionResult<Job>> GetId(int id)
     {
-        Log.Information("[JobBoardDemoApi] [JobController] [GetId] Starting GetId request");
-        var result = _js.GetId(id);
-        Log.Information("[JobBoardDemoApi] [JobController] [GetId] Finished GetId request, Validating");
+        string templateLog = "[JobBoardDemoApi] [JobController] [GetId] "; 
+        Log.Information($"{templateLog} Starting GetId request");
+        Job? result = await _js.GetId(id);
+        Log.Information($"{templateLog} Finished GetId request, Validating");
         if (result != null)
         {
-            Log.Information("[JobBoardDemoApi] [JobController] [GetId] Validated GetId request, returning");
+            Log.Information($"{templateLog} Validated GetId request, returning");
             return Ok(result);
         }
         else
         {
         
-            Log.Information("[JobBoardDemoApi] [JobController] [GetId] [ERROR] Error on request, returning error");
+            Log.Information($"{templateLog} Error on request, returning error");
             return NotFound(null);
         }
     }
     [HttpPost]
-    public ActionResult<bool> Post(Job j)
+    public async Task<ActionResult<bool>> Post(Job j)
     {
         Log.Information("[JobBoardDemoApi] [JobController] [Post] Starting Post request");
-        var result = _js.Post(j);
+        var result = await _js.Post(j);
         Log.Information("[JobBoardDemoApi] [JobController] [Post] Finished Post request, Validating");
         if (result)
             {
@@ -76,10 +77,10 @@ public class JobController : Controller, IJobController
         }
     }
     [HttpDelete]
-    public ActionResult<bool> Delete(int id)
+    public async Task<ActionResult<bool>> Delete(int id)
     {
         Log.Information("[JobBoardDemoApi] [JobController] [Delete] Starting Delete request");
-        bool result = _js.Delete(id);
+        bool result = await _js.Delete(id);
         Log.Information("[JobBoardDemoApi] [JobController] [Delete] Finished Delete request, Validating");
         if (result)
         {
@@ -95,10 +96,10 @@ public class JobController : Controller, IJobController
         }
     }
     [HttpPut]
-    public ActionResult<bool> Put(Job j)
+    public async Task<ActionResult<bool>> Put(Job j)
     {
         Log.Information("[JobBoardDemoApi] [JobController] [Put] Starting Put request");
-        bool result = _js.Put(j);
+        bool result = await _js.Put(j);
         Log.Information("[JobBoardDemoApi] [JobController] [Put] Finished Put request, Validating");
         if (result)
         {
@@ -112,7 +113,7 @@ public class JobController : Controller, IJobController
         }
     }
     [HttpOptions]
-    public ActionResult Options()
+    public async Task<ActionResult> Options()
     {
         Log.Information("[JobBoardDemoApi] [JobController] [Options] adding headers");
         HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");

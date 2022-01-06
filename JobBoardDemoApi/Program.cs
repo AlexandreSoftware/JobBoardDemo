@@ -23,8 +23,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IJobService, JobService>();
 builder.Services.AddAutoMapper(typeof(JobProfile));
-builder.Services.AddTransient<IJobRepository, JobRepository>(); 
-Seeder.Migrate(builder.Configuration.GetValue<string>("DefaultConnectionNodb"));
+builder.Services.AddTransient<IDapperWrapper,DapperWrapper>(x=>new DapperWrapper(builder.Configuration.GetValue<string>("DefaultConnection")));
+builder.Services.AddTransient<IJobRepository, JobRepository>();
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policyBuilder =>
@@ -34,18 +34,18 @@ builder.Services.AddCors(options =>
             policyBuilder.AllowAnyMethod();
         }));
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    Seeder.Migrate(builder.Configuration.GetValue<string>("DefaultConnectionNodb"));
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+else if (app.Environment.IsProduction())
+{
+    Seeder.PublishMigrate(builder.Configuration.GetValue<string>("DefaultConnectionNodb"));
+}
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

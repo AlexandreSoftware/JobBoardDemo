@@ -19,33 +19,33 @@ public class JobService:IJobService
         this._jr = jr;
         _mapper = mapper;
     }
-    public Job[] Get()
+    public async Task<Job[]> Get()
     {
         Log.Information("[JobBoardDemoApi] [JobController] [Options] starting get request");
-        var jobDto = _jr.Get();
+        var jobDto = await _jr.Get();
         
         Job[] job = jobDto.Select(x=>_mapper.Map<JobDTO,Job>(x)).Take(50).ToArray();
         return job;
     }
 
-    public bool Post(Job j)
+    public Task<bool> Post(Job j)
     {
             JobDTO jd = _mapper.Map<Job,JobDTO>(j);
             return _jr.Post(jd);
     }
-    public Job GetId(int id)
+    public async Task<Job> GetId(int id)
     {
         var jobDto = _jr.GetId(id);
-        Job job = _mapper.Map<JobDTO,Job>(jobDto);
+        Job job = _mapper.Map<JobDTO,Job>(await jobDto);
         return job;    
     }
-    public bool Delete(int id)
+    public async Task<bool> Delete(int id)
     {
-        return _jr.Delete(id);
+        return await _jr.Delete(id);
     }
-    public bool Put(Job j)
+    public async Task<bool> Put(Job j)
     {
         JobDTO jd = _mapper.Map<Job,JobDTO>(j);
-        return _jr.Put(jd);
+        return await _jr.Put(jd);
     }
 }

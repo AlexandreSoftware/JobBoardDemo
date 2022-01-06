@@ -8,7 +8,7 @@ using MySqlConnector;
 
 namespace JobBoardRepository;
 
-public class DapperWrapper:IDapperWrapper
+public class DapperWrapper : IDapperWrapper
 {
     public string connectionString;
 
@@ -16,6 +16,7 @@ public class DapperWrapper:IDapperWrapper
     {
         this.connectionString = cs;
     }
+
     public IDbConnection GetConnection()
     {
         return new MySqlConnection(connectionString);
@@ -28,27 +29,33 @@ public class DapperWrapper:IDapperWrapper
             return connection.Query<T>(sql);
         }
     }
-    public void QueryNoReturn(string sql)
+
+    public void Execute(string sql)
     {
         using (var connection = GetConnection())
         {
-            connection.Query(sql);
+            connection.ExecuteAsync(sql);
         }
     }
-    
-    public Task<IEnumerable<T>> QueryAsync<T>(string sql)
+
+    public async void ExecuteParams<T>(string sql,T obj){
+        using (var connection = GetConnection())
+        {
+           await connection.ExecuteAsync(sql:sql, param:obj);
+        }
+    }
+    public async Task<IEnumerable<T>> QueryAsync<T>(string sql)
     {
         using (var connection = GetConnection())
         {
-            return connection.QueryAsync<T>(sql);
+             return await connection.QueryAsync<T>(sql);
         }
     }
-    public async void QueryNoReturnAsync(string sql)
+
+    public async Task<IEnumerable<T>> QueryAsyncParams<T>(string sql, object obj)
     {
         using (var connection = GetConnection())
         {
-            
-            Console.WriteLine( await connection.QueryAsync(sql));
-        }
-    }
+            return await connection.QueryAsync<T>(sql, obj);
+        }    }
 }

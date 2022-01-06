@@ -18,42 +18,42 @@ public class JobControllerTests
         _jc = new JobController(_js.Object);
     }
     [Fact]
-    public void OnGet_NullValue_ShouldReturnNull()
+    public async void OnGet_NullValue_ShouldReturnNull()
     {
         //Arrange
-        _js.Setup(x => x.Get()).Returns((Job[])null);
+        _js.Setup(x => x.Get()).ReturnsAsync((Job[])null);
         //Act   
-        var result = _jc.Get();
+        var result = await _jc.Get();
+        //Assert
+        Assert.Null( result.Value);
+    }
+    [Fact]
+    public async void OnGet_emptyArray_ShouldReturnNull()
+    {
+        //Arrange
+        _js.Setup(x => x.Get()).ReturnsAsync((Job[])null);
+        //Act   
+        var result = await _jc.Get();
         //Assert
         Assert.Null(result.Value);
     }
     [Fact]
-    public void OnGet_emptyArray_ShouldReturnNull()
+    public async void OnPost_NullValue_ShouldReturnNull()
     {
         //Arrange
-        _js.Setup(x => x.Get()).Returns((Job[])null);
+        _js.Setup(x => x.Post(null)).ReturnsAsync(false);
         //Act   
-        var result = _jc.Get();
-        //Assert
-        Assert.Null(result.Value);
-    }
-    [Fact]
-    public void OnPost_NullValue_ShouldReturnNull()
-    {
-        //Arrange
-        _js.Setup(x => x.Post(null)).Returns(false);
-        //Act   
-        var result = _jc.Post(null);
+        var result = await _jc.Post(null);
         //Assert
         Assert.False(result.Value);   
     }
     [Fact]
-    public void OnPost_InvalidValue_ShouldReturnNull()
+    public async void OnPost_InvalidValue_ShouldReturnNull()
     {
         //Arrange
-        _js.Setup(x => x.Post(null)).Returns(false);
+        _js.Setup(x => x.Post(null)).ReturnsAsync(false);
         //Act   
-        var result = _jc.Post(null);
+        var result = await _jc.Post(null);
         //Assert
         Assert.False(result.Value);
     }
@@ -67,13 +67,13 @@ public class JobControllerTests
     [InlineData(30)]
     [InlineData(12)]
     [InlineData(242)]
-    public void OnPost_ValidValue_ShouldReturnTrue(int id)
+    public async void OnPost_ValidValue_ShouldReturnTrue(int id)
     {
         var obj = new Job {id = id};
         //Arrange
-        _js.Setup(x => x.Post(obj)).Returns(true);
+        _js.Setup(x => x.Post(obj)).ReturnsAsync(true);
         //Act   
-        var result = _jc.Post(obj);
+        var result = await _jc.Post(obj);
         //Assert
         Assert.True(result.Value);   
     }
@@ -88,14 +88,14 @@ public class JobControllerTests
     [InlineData(30)]
     [InlineData(12)]
     [InlineData(242)]
-    public void OnDelete_ValidValue_ShouldReturnTrue(int id)
+    public async void OnDelete_ValidValue_ShouldReturnTrue(int id)
     {
         //Arrange
-        _js.Setup(x => x.Delete(id)).Returns(true);
+        _js.Setup(x => x.Delete(id)).ReturnsAsync(true);
         //Act   
-        bool result = _jc.Delete(id).Value;
+        var result = await _jc.Delete(id);
         //Assert
-        Assert.True(result);   
+        Assert.True(result.Value);   
     }
     [Theory]
     [InlineData(1)]
@@ -106,13 +106,13 @@ public class JobControllerTests
     [InlineData(30)]
     [InlineData(12)]
     [InlineData(242)]
-    public void OnPut_ValidValue_ShouldReturnTrue(int id)
+    public async void OnPut_ValidValue_ShouldReturnTrue(int id)
     {
         var obj = new Job {id = id};
         //Arrange
-        _js.Setup(x => x.Put(obj)).Returns(true);
+        _js.Setup(x => x.Put(obj)).ReturnsAsync(true);
         //Act   
-        var result = _jc.Put(obj);
+        var result = await _jc.Put(obj);
         //Assert
         Assert.True(result.Value);   
     }

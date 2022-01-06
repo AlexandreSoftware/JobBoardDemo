@@ -6,13 +6,27 @@ public class Seeder
 {
     public static readonly DapperWrapper dw;
 
+    public async static void PublishMigrate(string cs)
+    {
+        string templatelog = "[JobBoardDemoRepository] [Seeder] [PublishMigrate]"; 
+        Log.Information($"{templatelog} Starting Migration For Publish");
+        Log.Information($"{templatelog} Initializing DapperWrapper ");
+        var db = new DapperWrapper(cs);
+        Log.Information($"{templatelog} Reading SQL file");
+        var sql = await SqlReader.ReadFile("PublishMigrate");
+        Log.Information($"{templatelog} Migrating Database");
+        db.Execute(sql);
+    }
     public async static void Migrate(string cs)
     {
-        Log.Information("[JobBoardDemoRepository] [Seeder] [Migrate] Starting Migration");
-        Console.WriteLine(cs);
+        string templatelog = "[JobBoardDemoRepository] [Seeder] [PublishMigrate]"; 
+        Log.Information($"{templatelog} Starting Migration For Development");
+        Log.Information($"{templatelog} Initializing DapperWrapper ");
         var db = new DapperWrapper(cs);
+        Log.Information($"{templatelog} Reading SQL file");
         var sql = await SqlReader.ReadFile("Migrate");
-        db.QueryNoReturnAsync(sql);
+        Log.Information($"{templatelog} Migrating Database");
+        db.Execute(sql);
     }
 
     public static void Seed(string cs)
