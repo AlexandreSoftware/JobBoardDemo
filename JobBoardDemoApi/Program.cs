@@ -47,7 +47,7 @@ if (app.Environment.IsProduction())
 if (app.Environment.IsDevelopment())
 {
     Seeder.MigrateAndSeed(builder.Configuration.GetValue<string>("DefaultConnectionNodb"),
-        builder.Configuration.GetValue<string>("DefaultConnection"));
+    builder.Configuration.GetValue<string>("DefaultConnection"));
     app.UseSwagger();
     app.UseSwaggerUI();
 }

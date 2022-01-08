@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using Bogus;
 using JobBoardRepository.Domain;
 using Newtonsoft.Json.Linq;
@@ -35,26 +36,36 @@ public class Seeder
 
     public async static void MigrateAndSeed(string cs1, string cs2)
     {
+        string templatelog = "[JobBoardDemoRepository] [Seeder] [MigrateAndSeed]";
+        Log.Information($"{templatelog} Starting Migration");
         await Migrate(cs1);
+        Log.Information($"{templatelog} Migration done");
+        Log.Information($"{templatelog} Starting Seeding");
         await Seed(cs2);
     }
     public async static Task Seed(string cs)
     {
+        string templatelog = "[JobBoardDemoRepository] [Seeder] [Seed]";
+        Log.Information($"{templatelog} Starting seeding, instantiating repository");
         JobRepository jr = new JobRepository(new DapperWrapper(cs));
         ApplicantRepository ar = new ApplicantRepository(new DapperWrapper(cs));
-        foreach (var item in GenerateJobs())
+        Log.Information($"{templatelog} Generating Jobs");
+        var jobs = GenerateJobs();
+        Log.Information($"{templatelog} Generating Applicants");
+        var applicants = GenerateApplicants();
+        Log.Information($"{templatelog} Inserting jobs and applicants");
+        for (int i = 0; i < jobs.Length; i++)
         {
-            await jr.Put(item);
+            jr.Put(jobs[i]);
+            ar.Put(applicants[i]);
         }
-
-        foreach (var item in GenerateApplicants())
-        {
-            await ar.Put(item);
-        }
+        Log.Information($"{templatelog} Done inserting jobs and applicants");
     }
 
     public static JobDTO[] GenerateJobs()
     {
+        string templatelog = "[JobBoardDemoRepository] [Seeder] [GenerateJobs]";
+        Log.Information($"{templatelog} Creating Job Generator faker");
         var fakerjob = new Faker<JobDTO>()
             .RuleFor(property: x => x.ProductId, c => c.IndexFaker)
             .RuleFor(property: x => x.Title, setter: c => c.Company + " " + c.Commerce)
@@ -71,15 +82,23 @@ public class Seeder
 
                 return val;
             });
-        return fakerjob.Generate(40).ToArray();
+        Log.Information($"{templatelog} Generating Jobs");
+        var res = fakerjob.Generate(40).ToArray();
+        Log.Information($"{templatelog} Jobs Generated, returning");
+        return res;
     }
 
     public static ApplicantDTO[] GenerateApplicants()
     {
+        string templatelog = "[JobBoardDemoRepository] [Seeder] [GenerateJobs]";
+        Log.Information($"{templatelog} Creating Applicant Generator faker");
         var fakerApplicants = new Faker<ApplicantDTO>()
             .RuleFor<int>(property:x=>x.Id,setter:y=>y.IndexFaker)
             .RuleFor<string>(property:x=>x.Name,setter:y=>y.Name.FullName())
             .RuleFor<double>(property:x=>x.WageExpectation,setter:y=>y.Finance.Random.Double());
-        return fakerApplicants.Generate(40).ToArray();
+        Log.Information($"{templatelog} Generating Applicants");
+        var res=  fakerApplicants.Generate(40).ToArray();
+        Log.Information($"{templatelog} Applicants Generated, returning");
+        return res;
     }
 }
