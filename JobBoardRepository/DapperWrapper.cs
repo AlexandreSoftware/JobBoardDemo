@@ -49,6 +49,18 @@ public class DapperWrapper : IDapperWrapper
             return res;
         }
     }
+    public async Task<dynamic> QueryAsyncDynamic(string sql)
+    {
+        string templateLog = "[JobBoardDemoApi] [DapperWrapper] [QueryAsync]";
+        Log.Information($"{templateLog} Started Query, calling GetConnection");
+        using (var connection = GetConnection())
+        {
+            Log.Information($"{templateLog} Got Connection, Querying with params");
+            var res = await connection.QueryAsync<dynamic>(sql);
+            Log.Information($"{templateLog} Sucess Querying, returning");
+            return res;
+        }
+    }
     
     public async Task<IEnumerable<T>> QueryAsyncParams<T>(string sql, object obj)
     {
@@ -73,7 +85,7 @@ public class DapperWrapper : IDapperWrapper
             Log.Information($"{templateLog} Sucessfully Executed Sql");
         }
     }
-
+    
     public async void ExecuteParamsAsync<T>(string sql,T obj){
         string templateLog = "[JobBoardDemoApi] [DapperWrapper] [ExecuteParams]";
         Log.Information($"{templateLog} Started Execution, calling GetConnection");

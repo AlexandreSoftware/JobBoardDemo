@@ -9,4 +9,5 @@ public class Job
     public double minPay { get; set; }
     public double maxPay { get; set; }
     public string description { get; set; }
+    public Status status { get; set; }
 }

@@ -11,4 +11,5 @@ public class ApplicantDTO
     public string Name { get; set; }
     [Required]
     public double WageExpectation { get; set; }
+    public string status { get; set; } 
 }

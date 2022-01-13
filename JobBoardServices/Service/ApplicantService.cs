@@ -2,6 +2,7 @@
 using JobBoardRepository.Domain;
 using JobBoardRepository.Interface;
 using JobBoardServices.Interface;
+using JobBoardServices.View;
 using Serilog;
 
 namespace JobBoardServices.Service;
@@ -10,32 +11,43 @@ public class ApplicantService : IApplicantService
 {
     private readonly IApplicantRepository _ar;
     private readonly IMapper _mapper;
-
-    public ApplicantService(IApplicantRepository ar,IMapper mapper)
+    private readonly IJobApplicantRepository _jar;
+    public ApplicantService(IApplicantRepository ar,IMapper mapper, IJobApplicantRepository jar)
     {
-        
-        this._ar = ar;
+        _ar = ar;
         _mapper = mapper;
+        _jar = jar;
     }
     public async Task<Applicant[]> Get()
     {
         string templatelog = "[JobBoardDemoApi] [ApplicantService] [Get] ";
         Log.Information($"{templatelog} starting get request");
-        var jobDto = await _ar.Get();
+        var ApplicantDto = await _ar.Get();
         Log.Information($"{templatelog} got ApplicationDTO[], converting to Application[]");
-        Applicant[] job = jobDto.Select(x=>_mapper.Map<ApplicantDTO,Applicant>(x)).Take(50).ToArray();
+        var task= ApplicantDto.Select(async x=>
+        {
+            var applicant= _mapper.Map<ApplicantDTO, Applicant>(x);
+            var job = await _jar.GetAppliedJobs(applicant.Id);
+            applicant.Jobs =  job.Select(y=> _mapper.Map<JobDTO,Job>(y)).ToArray();
+            return applicant;
+        });
+        var result = task.Select(t=>t.Result).Take(50).ToArray();
         Log.Information($"{templatelog} sucessfully got Application[] returning");
-        return job;
+        return result;
     }
     public async Task<Applicant> GetId(int id)
     {
         string templatelog = "[JobBoardDemoApi] [ApplicantService] [GetId] ";
         Log.Information($"{templatelog} Starting GET request");
-        var jobDto = _ar.GetId(id);
-        Log.Information($"{templatelog} Got ApplicationDTO by id, converting to Application");
-        Applicant job = _mapper.Map<ApplicantDTO,Applicant>(await jobDto);
+        var ApplicantDto = _ar.GetId(id);
+        Log.Information($"{templatelog} got ApplicationDTO by id,Getting Jobs");
+        var jobs = await _jar.GetAppliedJobs(ApplicantDto.Id);
+        Log.Information($"{templatelog} Got jobs, converting to Application");
+        Applicant Applicant = _mapper.Map<ApplicantDTO,Applicant>(await ApplicantDto);
+        Log.Information($"{templatelog} Sucessfully converted Applicant, converting Job");
+        Applicant.Jobs = jobs.Select(x=>_mapper.Map<JobDTO,Job>(x)).ToArray();
         Log.Information($"{templatelog} Sucessfully got Application returning");
-        return job;    
+        return Applicant;    
     }
 
     public async Task<bool> Delete(int id)

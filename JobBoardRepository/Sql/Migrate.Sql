@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS Job(
   ProductId INT AUTO_INCREMENT primary key,
   Title nvarchar(100) NOT NULL ,
   SubTitle nvarchar(100),
+  Status nvarchar(40),
   MinPay double,
   MaxPay double,
   Description nvarchar (1000)
@@ -18,6 +19,7 @@ CREATE TABLE IF NOT EXISTS JobApplicant(
     Id INT AUTO_INCREMENT primary key,
     Applicant Int NOT NULL ,
     Job Int NOT NULL,
+    Status nvarchar(40),
     FOREIGN KEY (Applicant) REFERENCES Applicant(Id),
     FOREIGN KEY (Job) REFERENCES Job(ProductId)
 );

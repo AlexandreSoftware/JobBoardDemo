@@ -1,0 +1,1 @@
+﻿insert into JobApplicant (Applicant, Job,Status) values (@ApplicantId,@JobId,@Status)

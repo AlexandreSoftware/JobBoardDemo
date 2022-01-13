@@ -23,6 +23,8 @@ public class JobDTO
     [AssertThat("MaxPay > MinPay")]
     public double MaxPay{ get; set; }
     [Required]
-    [StringLength(900,ErrorMessage = "Description must not be empty")]
-    public string Description{ get; set; }
+    [StringLength(900, ErrorMessage = "Description must not be empty")]
+    public string Description { get; set; }
+    
+    public string Status { get; set; }
 }

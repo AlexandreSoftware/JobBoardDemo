@@ -10,7 +10,10 @@ namespace JobBoardRepository;
 public class Seeder
 {
     public static readonly DapperWrapper dw;
-
+    /// <summary>
+    /// Migration Method to migrate the database for production
+    /// </summary>
+    /// <param name="cs">Connection string</param>
     public async static void PublishMigrate(string cs)
     {
         string templatelog = "[JobBoardDemoRepository] [Seeder] [PublishMigrate]"; 
@@ -22,6 +25,10 @@ public class Seeder
         Log.Information($"{templatelog} Migrating Database");
         db.Execute(sql);
     }
+    /// <summary>
+    /// Migration Method to migrate the database for development, this will drop the database and recreate it
+    /// </summary>
+    /// <param name="cs">Connection string</param>
     public async static Task Migrate(string cs)
     {
         string templatelog = "[JobBoardDemoRepository] [Seeder] [PublishMigrate]"; 
@@ -33,7 +40,7 @@ public class Seeder
         Log.Information($"{templatelog} Migrating Database");
         db.Execute(sql);
     }
-
+    
     public async static void MigrateAndSeed(string cs1, string cs2)
     {
         string templatelog = "[JobBoardDemoRepository] [Seeder] [MigrateAndSeed]";
@@ -49,19 +56,38 @@ public class Seeder
         Log.Information($"{templatelog} Starting seeding, instantiating repository");
         JobRepository jr = new JobRepository(new DapperWrapper(cs));
         ApplicantRepository ar = new ApplicantRepository(new DapperWrapper(cs));
+        JobApplicantRepository jar = new JobApplicantRepository(new DapperWrapper(cs));
         Log.Information($"{templatelog} Generating Jobs");
         var jobs = GenerateJobs();
         Log.Information($"{templatelog} Generating Applicants");
         var applicants = GenerateApplicants();
         Log.Information($"{templatelog} Inserting jobs and applicants");
+        
         for (int i = 0; i < jobs.Length; i++)
         {
-            jr.Put(jobs[i]);
-            ar.Put(applicants[i]);
+            await jr.Put(jobs[i]);
+            await ar.Put(applicants[i]);
         }
         Log.Information($"{templatelog} Done inserting jobs and applicants");
+        int[] RandomApplicantsIds = Shuffle40Random();
+        int[] RandomJobsIds = Shuffle40Random();
+        Log.Information($"{templatelog} Inserting job applicants");
+        for(int i=0;i<40;i++)
+        {
+            await jar.InsertJobApplicant(RandomJobsIds[i],RandomApplicantsIds[i]);
+        }
+        
     }
-
+    public static int[] Shuffle40Random()
+    {
+        int[] result = new int[40];
+        Random r = new Random();
+        for (int i = 0; i < 40; i++)
+        {
+            result[i] = r.Next(1, 41);
+        }
+        return result;
+    }
     public static JobDTO[] GenerateJobs()
     {
         string templatelog = "[JobBoardDemoRepository] [Seeder] [GenerateJobs]";

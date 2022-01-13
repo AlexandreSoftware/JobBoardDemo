@@ -25,10 +25,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IJobService, JobService>();
 builder.Services.AddTransient<IApplicantService, ApplicantService>();
+builder.Services.AddTransient<IJobApplicantService, JobApplicantService>();
 builder.Services.AddAutoMapper(typeof(JobProfile),typeof(ApplicantProfile));
 builder.Services.AddTransient<IDapperWrapper,DapperWrapper>(x=>new DapperWrapper(builder.Configuration.GetValue<string>("DefaultConnection")));
 builder.Services.AddTransient<IJobRepository, JobRepository>();
 builder.Services.AddTransient <IApplicantRepository,ApplicantRepository>();
+builder.Services.AddTransient<IJobApplicantRepository,JobApplicantRepository>();
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policyBuilder =>

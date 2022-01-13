@@ -5,7 +5,7 @@ namespace JobBoardRepository.Domain;
 public class JobApplicantDTO
 {
 
-    public ApplicantDTO ap { get; set; }
-    public JobDTO j { get; set; }
-    public string status { get; set; }
+    public int ApplicantId { get; set; }
+    public int JobId { get; set; }
+    public string Status { get; set; }
 }

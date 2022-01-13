@@ -1,0 +1,1 @@
+﻿delete FROM JobApplicant where Id = @Id;
