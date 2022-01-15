@@ -12,15 +12,17 @@ namespace JobBoardRepository;
 public class JobApplicantRepository : IJobApplicantRepository
 {
     private readonly IDapperWrapper _dw;
-    public JobApplicantRepository(IDapperWrapper _dw)
+    private readonly ISqlReader _sqlReader;
+    public JobApplicantRepository(IDapperWrapper _dw , ISqlReader _sqlReader)
     {
         this._dw = _dw;
+        this._sqlReader = _sqlReader;
     }
     public async Task<JobDTO[]> GetAppliedJobs(int aid)
     {
         string templatelog = "[JobBoardDemoRepository] [JobApplicantRepository] [GetAppliedJobs]";
         Log.Information($"{templatelog} Starting Repository, Finding File");
-        var sql = await SqlReader.ReadFile("JobApplicant/GetAppliedJobs");
+        var sql = await _sqlReader.ReadFile("JobApplicant/GetAppliedJobs");
         Log.Information($"{templatelog} Got Sql String, Querying");
         var x = _dw.QueryAsyncParams<JobDTO>(sql, new {Id = aid}).Result;
         Log.Information($"{templatelog} Query done, returning");
@@ -31,7 +33,7 @@ public class JobApplicantRepository : IJobApplicantRepository
         string templatelog = "[JobBoardDemoRepository] [JobApplicantRepository] [InsertJobApplicant]";
         JobApplicantDTO jadto = new JobApplicantDTO{JobId = jid, ApplicantId = aid,Status = "NotViewed"};;
         Log.Information($"{templatelog} Starting Repository, Finding File");
-        var sql = await SqlReader.ReadFile("JobApplicant/InsertJobApplicant");
+        var sql = await _sqlReader.ReadFile("JobApplicant/InsertJobApplicant");
         Log.Information($"{templatelog} Got Sql String, Executing");
         _dw.ExecuteParamsAsync(sql, jadto);
         return true;
@@ -40,7 +42,7 @@ public class JobApplicantRepository : IJobApplicantRepository
     {
         string templatelog = "[JobBoardDemoRepository] [JobApplicantRepository] [DeleteJobApplicant]";
         Log.Information($"{templatelog} Starting Repository, Finding File");
-        var sql = await SqlReader.ReadFile("JobApplicant/DeleteJobApplicant");
+        var sql = await _sqlReader.ReadFile("JobApplicant/DeleteJobApplicant");
         Log.Information($"{templatelog} Got Sql String, Executing");
         _dw.ExecuteParamsAsync(sql, new{Id = jaid});;
         return true;

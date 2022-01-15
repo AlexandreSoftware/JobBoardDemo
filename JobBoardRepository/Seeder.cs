@@ -10,6 +10,7 @@ namespace JobBoardRepository;
 public class Seeder
 {
     public static readonly DapperWrapper dw;
+    public static readonly SqlReader sqlReader;
     /// <summary>
     /// Migration Method to migrate the database for production
     /// </summary>
@@ -21,7 +22,7 @@ public class Seeder
         Log.Information($"{templatelog} Initializing DapperWrapper ");
         var db = new DapperWrapper(cs);
         Log.Information($"{templatelog} Reading SQL file");
-        var sql = await SqlReader.ReadFile("PublishMigrate");
+        var sql = await sqlReader.ReadFile("PublishMigrate");
         Log.Information($"{templatelog} Migrating Database");
         db.Execute(sql);
     }
@@ -36,7 +37,7 @@ public class Seeder
         Log.Information($"{templatelog} Initializing DapperWrapper ");
         var db = new DapperWrapper(cs);
         Log.Information($"{templatelog} Reading SQL file");
-        var sql = await SqlReader.ReadFile("Migrate");
+        var sql = await sqlReader.ReadFile("Migrate");
         Log.Information($"{templatelog} Migrating Database");
         db.Execute(sql);
     }
@@ -54,9 +55,9 @@ public class Seeder
     {
         string templatelog = "[JobBoardDemoRepository] [Seeder] [Seed]";
         Log.Information($"{templatelog} Starting seeding, instantiating repository");
-        JobRepository jr = new JobRepository(new DapperWrapper(cs));
-        ApplicantRepository ar = new ApplicantRepository(new DapperWrapper(cs));
-        JobApplicantRepository jar = new JobApplicantRepository(new DapperWrapper(cs));
+        JobRepository jr = new JobRepository(new DapperWrapper(cs),sqlReader);
+        ApplicantRepository ar = new ApplicantRepository(new DapperWrapper(cs),sqlReader);
+        JobApplicantRepository jar = new JobApplicantRepository(new DapperWrapper(cs),sqlReader);
         Log.Information($"{templatelog} Generating Jobs");
         var jobs = GenerateJobs();
         Log.Information($"{templatelog} Generating Applicants");

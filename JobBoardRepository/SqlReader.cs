@@ -1,11 +1,13 @@
 ﻿using System.Data.SqlTypes;
+using JobBoardRepository.Interface;
 
 namespace JobBoardRepository;
 
-public class SqlReader
+public class SqlReader:ISqlReader
+
 {
-    public async static Task<string> ReadFile(string path)
+    public async Task<string> ReadFile(string path)
     { 
-        return await File.ReadAllTextAsync("../JobBoardRepository/sql/"+path+".sql");
+        return await File.ReadAllTextAsync("../JobBoardRepository/Sql/"+path+".sql");
     }
 }

@@ -6,11 +6,11 @@ public interface IDapperWrapper
 {
     public IDbConnection GetConnection();
 
-    public IEnumerable<T> Query<T>(string sql);
+    public IEnumerable<T?> Query<T>(string sql);
 
     public void Execute(string sql);
     public void ExecuteParamsAsync<T>(string sql, T obj);
 
-    public Task<IEnumerable<T>> QueryAsync<T>(string sql);
-    public Task<IEnumerable<T>> QueryAsyncParams<T>(string sql, object obj);
+    public Task<IEnumerable<T?>> QueryAsync<T>(string sql);
+    public Task<IEnumerable<T?>> QueryAsyncParams<T>(string sql, object obj);
 }

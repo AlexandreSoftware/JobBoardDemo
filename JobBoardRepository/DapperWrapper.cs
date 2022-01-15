@@ -24,7 +24,7 @@ public class DapperWrapper : IDapperWrapper
         return res;
     }
 
-    public IEnumerable<T> Query<T>(string sql)
+    public IEnumerable<T?> Query<T>(string sql)
     {
         string templateLog = "[JobBoardDemoApi] [DapperWrapper] [Query]";
         Log.Information($"{templateLog} Started Query, calling GetConnection");
@@ -37,7 +37,7 @@ public class DapperWrapper : IDapperWrapper
         }
     }
     
-    public async Task<IEnumerable<T>> QueryAsync<T>(string sql)
+    public async Task<IEnumerable<T?>> QueryAsync<T>(string sql)
     {
         string templateLog = "[JobBoardDemoApi] [DapperWrapper] [QueryAsync]";
         Log.Information($"{templateLog} Started Query, calling GetConnection");
@@ -62,7 +62,7 @@ public class DapperWrapper : IDapperWrapper
         }
     }
     
-    public async Task<IEnumerable<T>> QueryAsyncParams<T>(string sql, object obj)
+    public async Task<IEnumerable<T?>> QueryAsyncParams<T>(string sql, object obj)
     {
         string templateLog = "[JobBoardDemoApi] [DapperWrapper] [QueryAsyncParams]";
         Log.Information($"{templateLog} Started Query, calling GetConnection");

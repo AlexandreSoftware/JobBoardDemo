@@ -48,7 +48,7 @@ public class JobServiceTests
     }
 
     [Fact]
-    public void OnGet_ValidValue_ShouldReturnMappedObject()
+    public async void OnGet_ValidValue_ShouldReturnMappedObject()
     {
         //Arrange
         var data = faker.Generate(20).ToArray();
@@ -66,7 +66,7 @@ public class JobServiceTests
             };
         }).ToArray();
         //Act   
-        var result = _js.Get();
+        var result = await _js.Get();
         //Assert
         result.Should().BeEquivalentTo(mockresult);
     }
@@ -119,7 +119,7 @@ public class JobServiceTests
             subTitle = data.SubTitle
         };
         //Act   
-        var result = _js.GetId(1);
+        var result = await _js.GetId(1);
         //Assert
         result.Should().BeEquivalentTo(mockresult);
     }

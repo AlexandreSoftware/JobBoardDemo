@@ -7,62 +7,113 @@ namespace JobBoardRepository;
 public class ApplicantRepository : IApplicantRepository
 {
     public IDapperWrapper _dw;
+    public ISqlReader _sqlReader;
 
-    public ApplicantRepository(IDapperWrapper dw){
-
+    public ApplicantRepository(IDapperWrapper dw, ISqlReader sqlReader)
+    {
         this._dw = dw;
+        this._sqlReader = sqlReader;
     }
 
     public async Task<ApplicantDTO[]> Get()
     {
-        string templatelog = "[JobBoardDemoRepository] [ApplicantRepository] [Get]";
-        Log.Information($"{templatelog} Starting Repository, Finding File");
-        var sql = await SqlReader.ReadFile("Applicant/Get");
-        Log.Information($"{templatelog} Got Sql String, Querying");
-        var x = _dw.QueryAsync<ApplicantDTO>(sql).Result;
-        Log.Information($"{templatelog} Query done, returning");
-        return x.ToArray();
+        string TemplateLog = "[JobBoardDemoRepository] [ApplicantRepository] [Get]";
+        Log.Information("{TemplateLog} Starting Repository, Finding File",TemplateLog);
+        var sql = await _sqlReader.ReadFile("Applicant/Get");
+        Log.Information("{TemplateLog} Got Sql String, Querying",TemplateLog);
+        try
+        {
+            var x = _dw.QueryAsync<ApplicantDTO>(sql).Result;
+            Log.Information("{TemplateLog} Query done, returning", TemplateLog);
+            return x.ToArray();
+        }
+        catch (Exception ex)
+        {
+                    Log.Error("{TemplateLog} [ERROR] Error in Repository, {ex}", TemplateLog, ex);
+
+            return null;
+        }
     }
     public async Task<bool> Post(ApplicantDTO ap)
     {
-        string templatelog = "[JobBoardDemoRepository] [ApplicantRepository] [Post]";
-        Log.Information($"{templatelog} Starting Repository, Finding File");
-        var sql = await SqlReader.ReadFile("Applicant/Post");
-        Log.Information($"{templatelog} Got Sql String, Querying");
-        _dw.ExecuteParamsAsync<ApplicantDTO>(@sql,ap);
-        Log.Information($"{templatelog} Query done, returning");
-        return true;
+        string TemplateLog = "[JobBoardDemoRepository] [ApplicantRepository] [Post]";
+        Log.Information("{TemplateLog} Starting Repository, Finding File",TemplateLog);
+        var sql = await _sqlReader.ReadFile("Applicant/Post");
+        Log.Information("{TemplateLog} Got Sql String, Querying",TemplateLog);
+        try
+        {
+            _dw.ExecuteParamsAsync<ApplicantDTO>(@sql,ap);
+            Log.Information("{TemplateLog} Query done, returning",TemplateLog);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Log.Error("{TemplateLog} [ERROR] Error in Repository, {ex}", TemplateLog, ex);
+            return false;
+        }
     }
 
     public async Task<ApplicantDTO> GetId(int id)
     {
-        string templatelog = "[JobBoardDemoRepository] [ApplicantRepository] [Post]";
-        Log.Information($"{templatelog} Starting Repository, Finding File");
-        var sql = await SqlReader.ReadFile("Applicant/GetId");
-        Log.Information($"{templatelog} Got Sql String, Querying");
-        var x = await _dw.QueryAsyncParams<ApplicantDTO>(@sql,new{Id=id});
-        Log.Information($"{templatelog} Query done, returning");
-        return x.ToList()[0];
+        string TemplateLog = "[JobBoardDemoRepository] [ApplicantRepository] [Post]";
+        Log.Information("{TemplateLog} Starting Repository, Finding File",TemplateLog);
+        var sql = await _sqlReader.ReadFile("Applicant/GetId");
+        Log.Information("{TemplateLog} Got Sql String, Querying",TemplateLog);
+        try
+        {
+            var x = await _dw.QueryAsyncParams<ApplicantDTO>(@sql, new {Id = id});
+            Log.Information("{TemplateLog} Query done, returning", TemplateLog);
+            if (x.Count() > 0)
+            {
+                return x.First();
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
+        catch(Exception ex)
+        {
+            Log.Error("{TemplateLog} [ERROR] Error in Repository, {ex}", TemplateLog, ex);
+            throw;
+        }
 
     }
     public async  Task<bool> Delete(int id)
     {
-        string templatelog = "[JobBoardDemoRepository] [ApplicantRepository] [Post]";
-        Log.Information($"{templatelog} Starting Repository, Finding File");
-        var sql = await SqlReader.ReadFile("Applicant/Delete");
-        Log.Information($"{templatelog} Got Sql String, Querying");
-        _dw.ExecuteParamsAsync(@sql,new{Id=id});
-        Log.Information($"{templatelog} Query done, returning");
-        return true;
+        string TemplateLog = "[JobBoardDemoRepository] [ApplicantRepository] [Post]";
+        Log.Information("{TemplateLog} Starting Repository, Finding File",TemplateLog);
+        var sql = await _sqlReader.ReadFile("Applicant/Delete");
+        Log.Information("{TemplateLog} Got Sql String, Querying",TemplateLog);
+        try
+        {
+            _dw.ExecuteParamsAsync(@sql, new {Id = id});
+            Log.Information("{TemplateLog} Query done, returning",TemplateLog);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Log.Error("{TemplateLog} [ERROR] Error in Repository, {ex}", TemplateLog, ex);
+            return false;
+        }
     }
     public  async Task<bool> Put(ApplicantDTO ap)
     {
-        string templatelog = "[JobBoardDemoRepository] [ApplicantRepository] [Post]";
-        Log.Information($"{templatelog} Starting Repository, Finding File");
-        var sql = await SqlReader.ReadFile("Applicant/Put");
-        Log.Information($"{templatelog} Got Sql String, Querying");
-        _dw.ExecuteParamsAsync<ApplicantDTO>(@sql,ap);
-        Log.Information($"{templatelog} Query done, returning");
-        return true;
+        string TemplateLog = "[JobBoardDemoRepository] [ApplicantRepository] [Post]";
+        Log.Information("{TemplateLog} Starting Repository, Finding File",TemplateLog);
+        var sql = await _sqlReader.ReadFile("Applicant/Put");
+        Log.Information("{TemplateLog} Got Sql String, Querying",TemplateLog);
+        try
+        {
+            _dw.ExecuteParamsAsync<ApplicantDTO>(@sql, ap);
+            Log.Information("{TemplateLog} Query done, returning", TemplateLog);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Log.Error("{TemplateLog} [ERROR] Error in Repository, {ex}", TemplateLog, ex);
+            return false;
+        }
+
     }
 }
